@@ -13,7 +13,7 @@ class FocPrint(models.Model):
                 
                 product_id = line.product_id.id
                 qty = line.quantity
-                price_dict[product_id] =   {'code':line.product_id.name,'quantity':line.quantity,'unit_price':line.price_unit,'name':line.name,'foc':0.0,'price_subtotal':line.price_subtotal}
+                price_dict[product_id] =   {'code':line.product_id.default_code,'quantity':line.quantity,'unit_price':line.price_unit,'name':line.product_id.name,'foc':0.0,'price_subtotal':line.price_subtotal}
         return price_dict
     
     def foc_dict(self):
@@ -23,7 +23,7 @@ class FocPrint(models.Model):
                 
                 product_id = line.product_id.id
                 qty = line.quantity
-                foc_dict[product_id] =  {'code':line.product_id.name,'quantity':0.0,'unit_price':line.price_unit,'name':line.name,'foc':line.quantity,'price_subtotal':line.price_subtotal}
+                foc_dict[product_id] =  {'code':line.product_id.default_code,'quantity':0.0,'unit_price':line.price_unit,'name':line.product_id.name,'foc':line.quantity,'price_subtotal':line.price_subtotal}
         return foc_dict
 
     
