@@ -5,10 +5,16 @@
             <t t-call="web.basic_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="header">
-                        <span style="font-size:15px;" class="pull-right"> <b>INVOICE </b></span> 
+                        <div style="font-size:19px;" class="pull-right">
+                            <span> <b>INVOICE </b></span> <br/>
+                            <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/>
+                        </div>
+                        
+                        <!-- <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/> -->
                         <br/>
-                        <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/>
+                        <div>
                         <br/>
+                        <!-- <br/> -->
                         <span style="font-size:10px;" class="pull-right" t-if="o.invoice_date" t-field="o.invoice_date"/>
                         <br/>
                         <br/>
@@ -16,9 +22,15 @@
                             <span class="page"/>/<span class="topage"/>
                         </div>
                         <br/>
+                        <!-- <address style="font-size:10px;" class="pull-right" t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["city"], "no_marker": True}' /> -->
+                        <span style="font-size:10px;" class="pull-right" t-if="o.partner_id.country_id" t-field="o.partner_id.country_id.name"/>
+                        <span style="font-size:10px;" class="pull-right" t-field="o.partner_id.street"/>
+                        </div>
                     </div>
                 <div class="page">
-                    
+                    <br/>
+                    <br/> 
+                    <br/>
                     <br/> 
                     <br/>
                     <br/>
@@ -35,30 +47,30 @@
                         <tbody>
                             <tr t-foreach="o.full_dictionary()" t-as="line" width="100%" style="border-style:hidden;">
                                 <t t-set="counter" t-value="counter+1" />
-                                <td width="5%" style="height:30px !important;font-size:12px;">
+                                <td width="5%" style="height:30px !important;font-size:10px;">
                                     <t  t-esc="s_no"/>
                                     <t t-set="s_no" t-value="s_no + 1"/>
                                 </td>
-                                <td width="10%" style="font-size:12px;">
+                                <td width="10%" style="font-size:10px;">
                                     <t t-esc="line_value['code']"/>
                                 </td>
-                                <td width="30%" style="font-size:12px;">
+                                <td width="30%" style="font-size:10px;">
                                     <t t-esc="line_value['name']"/>
                                 </td>
-                                <td width="10%" style="font-size:12px;"></td>
-                                <td width="10%" style="font-size:12px;"></td>
-                                <td width="5%" style="font-size:12px;">
+                                <td width="10%" style="font-size:10px;"></td>
+                                <td width="10%" style="font-size:10px;"></td>
+                                <td width="5%" style="font-size:10px;">
                                     <t t-esc="line_value['quantity']"/>
                                 </td>
-                                <td width="5%" style="font-size:12px;">
+                                <td width="5%" style="font-size:10px;">
                                     <t t-esc="line_value['foc']" />
                                 </td>
-                                <td width="10%" style="font-size:12px;">
+                                <td width="10%" style="font-size:10px;">
                                     <t t-esc="line_value['unit_price']"/>
                                 </td>
-                                <td width="5%" style="font-size:12px;">
+                                <td width="5%" style="font-size:10px;">
                                 </td>
-                                <td width="10%" style="font-size:12px;">
+                                <td width="10%" style="font-size:10px;">
                                     <t t-esc="line_value['price_subtotal']"/>
                                     <!-- <t t-esc="counter"/> -->
                                 </td>
