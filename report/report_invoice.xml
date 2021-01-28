@@ -2,22 +2,32 @@
 <odoo>
     <data>
         <template id="report_invoice_document_ncp">
-            <t t-call="web.external_layout">
+            <t t-call="web.basic_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <div class="header">
+                        <span style="font-size:15px;" class="pull-right"> <b>INVOICE </b></span> 
+                        <br/>
+                        <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/>
+                        <br/>
+                        <span style="font-size:10px;" class="pull-right" t-if="o.invoice_date" t-field="o.invoice_date"/>
+                        <br/>
+                        <br/>
+                        <div class="pull-right" style="font-size:10px;" >
+                            <span class="page"/>/<span class="topage"/>
+                        </div>
+                        <br/>
+                    </div>
                 <div class="page">
-                    <span style="font-size:15px;" class="pull-right"> <b>INVOICE </b></span> 
+                    
+                    <br/> 
                     <br/>
-                    <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/>
-                    <br/>
-                    <span style="font-size:10px;" class="pull-right" t-if="o.invoice_date" t-field="o.invoice_date"/>
-                    <!-- <br/>
-                    <br/> -->
                     <br/>
                     <span style="font-size:14px;padding-left:150px;font:bold;" class="pull-left" t-if="o.partner_id" t-field="o.partner_id.name"/>
                     <br/>
                     <br/>
                     <br/>
                     <t t-set="counter" t-value="int(0)"/>
+                    <!-- <t t-set="page_no" t-value="int(1)"/> -->
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
                     <table class="table table-sm o_main_table" width="100%" style="border-style:hidden;" name="invoice_line_table">
                         <t t-set="s_no" t-value="int(1)"/>
@@ -54,6 +64,7 @@
                                 </td>
                                 <t t-if="counter == 6">
                                     <t t-set="counter" t-value="0"/>
+                                    <!-- <t t-set="page_no" t-value="counter+1" /> -->
                                     <tr>
                                         <td style="border-style:hidden;height:50px" />
                                     </tr>
