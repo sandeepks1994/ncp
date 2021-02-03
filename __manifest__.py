@@ -34,8 +34,12 @@ Generate NCP invoice Report
     'data': [
         'report/report_invoice.xml',
         'report/account_report.xml',
+        'report/quotation_template.xml',
+        'report/quotation_report.xml',
+        'report/delivery_template.xml',
+        'report/delivery_report.xml',
 
-            ],
+    ],
     'qweb': [],
     'installable': True,
     'application': True,

@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="report_invoice_document_ncp">
+        <template id="ncp_quotation_template">
             <t t-call="web.basic_layout">
-                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="o" t-value="doc.with_context(lang=lang)"/>
                 <div class="header">
                     <div style="font-size:19px;" class="pull-right">
-                        <span>
-                            <b>INVOICE</b>
-                        </span>
+                        <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                            <span t-if="doc.state not in ['draft','sent']">
+                                <b>
+                                    SALE ORDER
+                                </b>
+                            </span>
+                            <span t-if="doc.state in ['draft','sent']">
+                                <b>
+                                    QUOTATION
+                                </b>
+                            </span>
+                        </t>
+                        <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                            <span>
+                                <b>
+                                    PRO-FORMA INVOICE
+                                </b>
+                            </span>
+                        </t>
                         <br/>
                         <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/>
                     </div>
@@ -18,8 +34,8 @@
                     <div>
                         <br/>
                         <!-- <br/> -->
-                        <span style="font-size:10px;" class="pull-right" t-if="o.invoice_date"
-                              t-field="o.invoice_date"/>
+                        <span style="font-size:10px;" class="pull-right" t-if="o.date_order"
+                              t-field="o.date_order"/>
                         <br/>
                         <br/>
                         <div class="pull-right" style="font-size:10px;">
@@ -46,38 +62,37 @@
                     <br/>
                     <br/>
                     <t t-set="counter" t-value="int(0)"/>
-                    <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
                     <table class="table table-sm o_main_table" width="100%" style="border-style:hidden;"
                            name="invoice_line_table">
                         <t t-set="s_no" t-value="int(1)"/>
                         <tbody>
-                            <tr t-foreach="o.full_dictionary()" t-as="line" width="100%" style="border-style:hidden;">
+                            <tr t-foreach="o.order_line" t-as="line" width="100%" style="border-style:hidden;">
                                 <t t-set="counter" t-value="counter+1"/>
                                 <td width="3%" style="height:50px !important;font-size:10px;">
                                     <t t-esc="s_no"/>
                                     <t t-set="s_no" t-value="s_no + 1"/>
                                 </td>
                                 <td width="9%" style="font-size:10px;">
-                                    <t t-esc="line_value['code']"/>
+                                    <t t-esc="line.product_id.default_code"/>
                                 </td>
                                 <td width="30%" style="font-size:10px;">
-                                    <t t-esc="line_value['name']"/>
+                                    <t t-esc="line.product_id.name"/>
                                 </td>
                                 <td width="5%" style="font-size:10px;"></td>
                                 <td width="5%" style="font-size:10px;"></td>
                                 <td width="7%" style="font-size:10px;">
-                                    <t t-esc="line_value['quantity']"/>
+                                    <t t-esc="line.product_uom_qty"/>
                                 </td>
                                 <td width="7%" style="font-size:10px;">
-                                    <t t-esc="line_value['foc']"/>
                                 </td>
                                 <td width="10%" style="font-size:10px;">
-                                    <t t-esc="line_value['unit_price']"/>
+                                    <t t-esc="line.price_unit"/>
                                 </td>
-                                <td width="5%" style="font-size:10px;">
+                                <td t-if="display_discount" width="5%" style="font-size:10px;">
+                                    <span t-esc="line.discount"/>
                                 </td>
                                 <td width="10%" style="font-size:10px;" class="text-center">
-                                    <t t-esc="line_value['price_subtotal']"/>
+                                    <t t-esc="line.price_subtotal"/>
                                 </td>
                                 <t t-if="counter == 6">
                                     <t t-set="counter" t-value="0"/>
@@ -148,25 +163,28 @@
                                             <span t-field="o.amount_untaxed"/>
                                         </td> -->
                                     </tr>
-                                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                                        <tr style="border-style:hidden;">
-                                            <t t-if="len(o.line_ids.filtered(lambda line: line.tax_line_id)) in [0, 1] and o.amount_untaxed == amount_by_group[2]">
-                                                <!-- <td>
-                                                    <span class="text-nowrap" t-esc="amount_by_group[0]"/>
-                                                </td> -->
-                                                <td class="pull-right o_price_total" style="border-style:hidden;">
-                                                    <span class="text-nowrap" t-esc="amount_by_group[3]"/>
+                                    <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+                                        <tr style="">
+                                            <t t-if="amount_by_group[5] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                                <td name="td_amount_by_group_label_3">
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                    <span>&amp;nbsp;<span>on</span>&amp;nbsp;
+                                                        <t t-esc="amount_by_group[2]"
+                                                           t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                    </span>
+                                                </td>
+                                                <td name="td_amount_by_group_3" class="text-right o_price_total">
+                                                    <span t-esc="amount_by_group[1]"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
                                                 </td>
                                             </t>
                                             <t t-else="">
-                                                <td>
-                                                    <!-- <span t-esc="amount_by_group[0]"/> -->
-                                                    <span class="text-nowrap">on
-                                                        <t t-esc="amount_by_group[4]"/>
-                                                    </span>
+                                                <td name="td_amount_by_group_label">
+                                                    <span t-esc="amount_by_group[0]"/>
                                                 </td>
-                                                <td class="text-right o_price_total">
-                                                    <span class="text-nowrap" t-esc="amount_by_group[3]"/>
+                                                <td name="td_amount_by_group" class="text-right o_price_total">
+                                                    <span t-esc="amount_by_group[1]"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
                                                 </td>
                                             </t>
                                         </tr>
@@ -225,13 +243,13 @@
                                         <td style="border-style:hidden;">
                                         </td>
                                         <td class="text-right" style="border-style:hidden;font-size:12px;">
-                                            <span class="text-nowrap" t-field="o.amount_total"/>
+                                            <span class="text-nowrap" t-field="o.amount_untaxed"/>
                                             <br/>
                                             <br/>
                                             <br/>
                                             <br/>
                                             <!-- <span class="text-nowrap" t-field="o.invoice_payments_widget"/> -->
-                                            <span class="text-nowrap" t-field="o.amount_residual"/>
+                                            <span class="text-nowrap" t-field="o.amount_total"/>
                                         </td>
                                     </tr>
                                     <!-- <br/>
@@ -258,12 +276,11 @@
             </t>
         </template>
 
-        <template id="report_invoice_ncp">
+        <template id="ncp_quotation">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-set="lang"
-                       t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
-                    <t t-call="ncp_invoice_report.report_invoice_document_ncp" t-lang="lang"/>
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.partner_id.lang"/>
+                    <t t-call="ncp_invoice_report.ncp_quotation_template" t-lang="lang"/>
                 </t>
             </t>
         </template>

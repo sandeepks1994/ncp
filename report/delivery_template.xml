@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="ncp_delivery_template">
+            <t t-call="web.basic_layout">
+                <t t-set="o" t-value="doc.with_context(lang=lang)"/>
+                <div class="header">
+                    <div style="font-size:19px;" class="pull-right">
+                        <span>
+                            <b>DELIVERY NOTE</b>
+                        </span>
+                        <br/>
+                        <span style="font-size:10px;" class="pull-right" t-if="o.name != '/'" t-field="o.name"/>
+                    </div>
+
+                    <br/>
+                    <div>
+                        <br/>
+                        <!-- <br/> -->
+                        <span style="font-size:10px;" class="pull-right" t-if="o.scheduled_date"
+                              t-field="o.scheduled_date"/>
+                        <br/>
+                        <br/>
+                        <div class="pull-right" style="font-size:10px;">
+                            <span class="page"/>/
+                            <span class="topage"/>
+                        </div>
+                        <br/>
+                        <span style="font-size:10px;" class="pull-right" t-if="o.partner_id.country_id"
+                              t-field="o.partner_id.country_id.name"/>
+                        <span style="font-size:10px;" class="pull-right" t-field="o.partner_id.street"/>
+                    </div>
+                </div>
+                <div class="page">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <span style="font-size:14px;padding-left:150px;font:bold;" class="pull-left" t-if="o.partner_id"
+                          t-field="o.partner_id.name"/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <t t-set="counter" t-value="int(0)"/>
+                    <table class="table table-sm o_main_table" width="100%" style="border-style:hidden;"
+                           name="invoice_line_table">
+                        <t t-set="s_no" t-value="int(1)"/>
+                        <tbody>
+                            <tr t-foreach="o.move_ids_without_package" t-as="line" width="100%"
+                                style="border-style:hidden;">
+                                <t t-set="counter" t-value="counter+1"/>
+                                <td width="3%" style="height:50px !important;font-size:10px;">
+                                    <t t-esc="s_no"/>
+                                    <t t-set="s_no" t-value="s_no + 1"/>
+                                </td>
+                                <td width="9%" style="font-size:10px;">
+                                    <t t-esc="line.product_id.default_code"/>
+                                </td>
+                                <td width="30%" style="font-size:10px;">
+                                    <t t-esc="line.product_id.name"/>
+                                </td>
+                                <td width="5%" style="font-size:10px;"></td>
+                                <td width="5%" style="font-size:10px;"></td>
+                                <td width="7%" style="font-size:10px;">
+                                    <t t-esc="line.product_uom_qty"/>
+                                </td>
+                                <td width="7%" style="font-size:10px;">
+                                </td>
+                                <td width="10%" style="font-size:10px;">
+                                </td>
+                                <td width="5%" style="font-size:10px;">
+                                </td>
+                                <td width="10%" style="font-size:10px;" class="text-center">
+                                </td>
+                                <t t-if="counter == 6">
+                                    <t t-set="counter" t-value="0"/>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-style:hidden;height:50px"/>
+                                    </tr>
+
+                                </t>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                    <div class="footer">
+
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="ncp_delivery">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.partner_id.lang"/>
+                    <t t-call="ncp_invoice_report.ncp_delivery_template" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
