@@ -37,7 +37,6 @@ class FocPrint(models.Model):
         for line in self.invoice_line_ids:
             product_set.add(line.product_id.id)
             # product_id_list.append(line.product_id.id)
-        print("product......",product_set)
         
         for product in product_set:
            

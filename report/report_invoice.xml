@@ -39,30 +39,28 @@
                     <br/>
                     <br/>
                     <t t-set="counter" t-value="int(0)"/>
-                    <!-- <t t-set="page_no" t-value="int(1)"/> -->
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
                     <table class="table table-sm o_main_table" width="100%" style="border-style:hidden;" name="invoice_line_table">
                         <t t-set="s_no" t-value="int(1)"/>
-                        <!-- <t t-set="counter" t-value="int(0)"/> -->
                         <tbody>
                             <tr t-foreach="o.full_dictionary()" t-as="line" width="100%" style="border-style:hidden;">
                                 <t t-set="counter" t-value="counter+1" />
-                                <td width="5%" style="height:30px !important;font-size:10px;">
+                                <td width="3%" style="height:50px !important;font-size:10px;">
                                     <t  t-esc="s_no"/>
                                     <t t-set="s_no" t-value="s_no + 1"/>
                                 </td>
-                                <td width="10%" style="font-size:10px;">
+                                <td width="9%" style="font-size:10px;">
                                     <t t-esc="line_value['code']"/>
                                 </td>
                                 <td width="30%" style="font-size:10px;">
                                     <t t-esc="line_value['name']"/>
                                 </td>
-                                <td width="10%" style="font-size:10px;"></td>
-                                <td width="10%" style="font-size:10px;"></td>
-                                <td width="5%" style="font-size:10px;">
+                                <td width="5%" style="font-size:10px;"></td>
+                                <td width="5%" style="font-size:10px;"></td>
+                                <td width="7%" style="font-size:10px;">
                                     <t t-esc="line_value['quantity']"/>
                                 </td>
-                                <td width="5%" style="font-size:10px;">
+                                <td width="7%" style="font-size:10px;">
                                     <t t-esc="line_value['foc']" />
                                 </td>
                                 <td width="10%" style="font-size:10px;">
@@ -70,13 +68,11 @@
                                 </td>
                                 <td width="5%" style="font-size:10px;">
                                 </td>
-                                <td width="10%" style="font-size:10px;">
+                                <td width="10%" style="font-size:10px;" class="text-center">
                                     <t t-esc="line_value['price_subtotal']"/>
-                                    <!-- <t t-esc="counter"/> -->
                                 </td>
                                 <t t-if="counter == 6">
                                     <t t-set="counter" t-value="0"/>
-                                    <!-- <t t-set="page_no" t-value="counter+1" /> -->
                                     <tr>
                                         <td style="border-style:hidden;height:50px" />
                                     </tr>
